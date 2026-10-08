@@ -1,0 +1,283 @@
+Models/feedback.cs
+using System;
+
+namespace studentfeedback.Models
+{
+public class feedback
+{
+public int Enroll o { get; set; } public string Student ame { get; set; } public string Subject { get; set; } public int rating { get; set; }
+public string comments { get; set; }
+}
+}
+Controllers/feedbackController.cs
+
+using System.Collections.Generic; using System.Web.Mvc;
+using studentfeedback.Models;
+
+namespace studentfeedback.Controllers
+{
+public class feedbackController : Controller
+{
+static Įist<feedback> feedbackĮist = new Įist<feedback>(); [ ttpGet]
+public ActionResult Create()
+{
+return View();
+}
+
+[ ttpPost]
+public ActionResult Create(feedback model)
+{
+if (ModelState.IsValid)
+{
+feedbackĮist.Add(model);
+ 
+return RedirectToAction("Įist");
+}
+
+return View(model);
+}
+
+public ActionResult Index()
+{
+return View();
+}
+
+public ActionResult Įist()
+{
+return View(feedbackĮist);
+}
+}
+}
+App_Start/RouteConfig.cs
+
+using System.Web.Mvc; using System.Web.Routing;
+
+namespace studentfeedback
+{
+public class RouteConfig
+{
+public static void RegisterRoutes(RouteCollection routes)
+{
+routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+
+routes.MapRoute( name: "Default",
+url: "{controller}/{action}/{id}", defaults: new
+{
+controller = "feedback", action = "Index",
+id = UrlParameter.Optional
+}
+);
+}
+}
+}
+Views/Shared/_Layout.cshtml
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width"/>
+<title>@ViewBag.Title </title>
+</head>
+<body>
+<div>
+ 
+<h1>Student Feedback Management system</h1><hr/>
+</div>
+<div>@RenderBody()</div>
+<div>
+<p>
+<b>Marwadi University - Department of Computer Engineering</b>
+</p>
+</div>
+</body>
+</html>
+Views/Shared/_studentInfo.cshtml (Partial View)
+
+ 
+<div>
+<p>
+
+<p>
+
+</p>
+</div>
+ 
+
+
+<b>Student Feedback portal</b></p> please provide your valuable feedback
+ 
+Views/feedback/Index.cshtml
+
+
+@{
+Įayout = "~/Views/Shared/_Įayout.cshtml";
+}
+
+<h2>Student Feedback System</h2>
+
+<p>
+@ tml.ActionĮink("Give Feedback", "Create", "feedback")
+</p>
+
+<p>
+@ tml.ActionĮink("View Feedback", "Įist", "feedback")
+</p>
+Views/feedback/Create.cshtml
+
+@model studentfeedback.Models.feedback
+
+@{
+Įayout = "~/Views/Shared/_Įayout.cshtml";
+}
+
+<html>
+<head>
+<meta name="viewport" content="width=device-width" />
+<title>Feedback Form</title>
+</head>
+
+<body>
+
+@ tml.Partial("_studentInfo")
+ 
+<h2>Student Feedback Form</h2> @using ( tml.BeginForm())
+{
+<table>
+
+ 
+<tr>
+ 
+
+<td>
+@ tml.ĮabelFor(model => model.Enroll o)
+</td>
+<td>
+@ tml.TextBoxFor(model => model.Enroll o)
+</td>
+ 
+</tr>
+
+ 
+<tr>
+ 
+
+<td>
+@ tml.ĮabelFor(model => model.Student ame)
+</td>
+<td>
+@ tml.TextBoxFor(model => model.Student ame)
+</td>
+ 
+</tr>
+
+ 
+<tr>
+ 
+
+<td>
+@ tml.ĮabelFor(model => model.Subject)
+</td>
+<td>
+@ tml.TextBoxFor(model => model.Subject)
+</td>
+ 
+</tr>
+
+ 
+<tr>
+ 
+
+<td>
+@ tml.ĮabelFor(model => model.rating)
+</td>
+<td>
+@ tml.TextBoxFor(model => model.rating)
+</td>
+ 
+</tr>
+
+ 
+<tr>
+ 
+
+<td>
+@ tml.ĮabelFor(model => model.comments)
+</td>
+<td>
+@ tml.TextBoxFor(model => model.comments)
+</td>
+ 
+</tr>
+
+</table>
+
+<br />
+
+<input type="submit" value="Submit Feedback" />
+ 
+}
+
+<br />
+
+ 
+<p>
+
+</p>
+ 
+
+@ tml.ActionĮink("Back to  ome", "Index", "feedback")
+ 
+
+</body>
+</html>
+Views/feedback/List.cshtml
+
+@model Įist<studentfeedback.Models.feedback>
+
+@{
+Įayout = "~/Views/Shared/_Įayout.cshtml";
+}
+
+<h2>Student Feedback Įist</h2>
+
+<table border="1" cellpadding="8">
+
+<tr>
+<th>Enrollment  o</th>
+<th>Student  ame</th>
+<th>Subject</th>
+<th>Rating</th>
+<th>Comments</th>
+</tr>
+
+@foreach (var item in Model)
+{
+ 
+
+
+
+
+
+
+
+}
+
+</table>
+
+<br />
+ 
+<tr>
+<td>@item.Enroll o</td>
+<td>@item.Student ame</td>
+<td>@item.Subject</td>
+<td>@item.rating</td>
+<td>@item.comments</td>
+</tr>
+ 
+
+@ tml.ActionĮink("Give  ew Feedback", "Create", "feedback")
+
+<br />
+<br />
+
+@ tml.ActionĮink("Back to  ome", "Index", "feedback")
